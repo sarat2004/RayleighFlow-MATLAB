@@ -46,7 +46,7 @@ function ax = plotRayleighLine(M, gamma)
     xlabel('Mach Number, M');
     ylabel('Normalized Property');
 
-    title(sprintf('Rayleigh Flow Property Ratios, \\gamma = %.3g', gamma));
+    title(sprintf('Rayleigh Flow Property , \\gamma = %.3g', gamma));
 
     legend( ...
         'p/p^*', ...
