@@ -61,6 +61,13 @@ jobs:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
 
+      - name: Start virtual framebuffer (Xvfb)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1280x1024x24 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+
       - name: Headless smoke test (launch & close app)
         uses: matlab-actions/run-command@v2
         with:
@@ -76,8 +83,8 @@ jobs:
               disp(getReport(ME));
               error('Smoke test failed: %s', ME.message);
             end
-        # Runs headless; matlab-actions runners provide a virtual X display
-        # on ubuntu-latest so App Designer's UIFigure can render without a GUI session.
+        # DISPLAY is set by the "Start virtual framebuffer" step above, so
+        # App Designer's UIFigure has a display to render into on the runner.
 
       - name: Upload test results
         if: always()
