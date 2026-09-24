@@ -35,10 +35,7 @@ jobs:
           command: |
             addpath(genpath('src'));
             addpath('app');
-            files = [ ...
-              dir(fullfile('src', 'equations', '*.m')); ...
-              dir(fullfile('app', 'RayleighFlowApp.mlapp')) ...
-            ];
+            files = dir(fullfile('src', 'equations', '*.m'));
             hasIssues = false;
             for k = 1:numel(files)
               f = fullfile(files(k).folder, files(k).name);
@@ -52,6 +49,10 @@ jobs:
             if hasIssues
               warning('checkcode found issues (see above).');
             end
+        # checkcode only runs against src/equations/*.m. RayleighFlowApp.mlapp
+        # is a zipped container (not plain MATLAB text), so Code Analyzer
+        # support on it is unreliable — its validity is instead covered by
+        # the headless smoke test step below, which actually instantiates it.
 
       - name: Unit test equation functions
         uses: matlab-actions/run-tests@v2
